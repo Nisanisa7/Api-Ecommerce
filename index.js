@@ -2,10 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const productRouter = require('./src/routes/products')
-const categoryRouter = require('./src/routes/category')
-const userRouter = require('./src/routes/user')
-const orderRouter = require('./src/routes/orders')
+const route = require('./src/routes/index')
 const port = process.env.PORT
 const morgan = require('morgan')
 const setCors = require('./src/middleware/cors')
@@ -24,12 +21,11 @@ const myMiddleware = (req, res, next) => {
   
   app.use(myMiddleware)
   app.use(cors())
-//   app.use(setCors)
+//   app.use(setCors) 
 
-  app.use('/products', productRouter)
-  app.use('/category', categoryRouter)
-  app.use('/user', userRouter)
-  app.use('/orders', orderRouter)
+  app.use('/v1', route)
+// static route for image
+  app.use('/file', express.static('./uploads'))
 
   app.use('*', (req, res)=>{
       res.status(404).json({
@@ -44,3 +40,4 @@ const myMiddleware = (req, res, next) => {
   app.listen(port, ()=>{
       console.log(`server is running on port ${port}`);
   })
+ 

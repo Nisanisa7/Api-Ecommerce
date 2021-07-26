@@ -1,9 +1,9 @@
 const response = (res, result, status, error) =>{
     const resultPrint = {}
-    resultPrint.error = error || false
-    resultPrint.status = status || 200
-    resultPrint.message = message || null
-    resultPrint.result = result || []
+    resultPrint.status = 'success'
+    resultPrint.statusCode = status
+    resultPrint.data = result
+    resultPrint.error = error || null
     res.status(status).json(resultPrint)
   }
   

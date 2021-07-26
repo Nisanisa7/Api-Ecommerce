@@ -12,9 +12,20 @@ const getAllUser = () =>{
     })
 }
 // ========================================================
-const insertUser = (data)=>{
+const Register = (data)=>{
     return new Promise((resolve, reject)=>{
         connection.query('INSERT INTO users SET ?', data, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else{
+                reject(error)
+            }
+        })
+    })
+}
+const findUser = (email)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query('SELECT * FROM users where email = ?', email, (error, result)=>{
             if(!error){
                 resolve(result)
             } else{
@@ -51,7 +62,8 @@ const deleteUser = (id)=>{
 //==========================================================
 module.exports = {
     getAllUser,
-    insertUser,
+    Register,
     updateUser,
-    deleteUser
+    deleteUser,
+    findUser
 }
