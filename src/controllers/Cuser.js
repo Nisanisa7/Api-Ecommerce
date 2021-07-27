@@ -42,7 +42,7 @@ const Register = async (req, res, next)=>{
             userModel.Register(data)
             .then((result)=>{
                 delete data.password
-                helpers.response(res, data , 200)
+                helpers.response(res, data , 200, {message: "registered successfully! "})
               
             })
             .catch((error)=>{
@@ -56,19 +56,21 @@ const Register = async (req, res, next)=>{
 // LOGIN ==========================================================
 
 const Login = async (req, res, next) =>{
-    const {email, password} = req.body
+    const {email, password, role} = req.body
     const result = await userModel.findUser(email)
     // console.log(result);
     const user = result[0]
+    if(email == ''|| password == ''){
+        helpers.response(res, null, 500, {message: 'Email or Password can not be empty'})
+    }
     // console.log(user.email);
     bcrypt.compare(password, user.password, function(err, resCompare) {
-        if (!resCompare) {
-            
+        if (!resCompare) {      
             return helpers.response(res, null, 401, {message: 'Password wrong'})
         }
 
         // generate token
-        jwt.sign({ email: user.email, role: '1' },
+        jwt.sign({ email: user.email, role},
             process.env.SECRET_KEY, { expiresIn: "24h" },
             function(err, token) {
                 console.log(token);
