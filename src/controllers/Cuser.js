@@ -88,12 +88,12 @@ const Login = async (req, res, next) =>{
 
 //==========================================================
 const updateUser = (req, res, next)=>{
-    const {userName, email, password} = req.body
+    const {userName, email} = req.body
     const id = req.params.id
     const data = {
         userName : userName,
         email : email,
-        password : password
+        // password : password
     }
     userModel.updateUser(id, data)
     .then(()=>{

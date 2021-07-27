@@ -6,11 +6,11 @@ const auth = require('../middleware/auth')
 
 router
 
-.get('/', auth.verifyAccess, productController.getAllProduct)
+.get('/', productController.getAllProduct)
 .get('/:idproduct', productController.getProductById)
-.post('/', auth.verifyAccess, auth.restrictTo('Admin', 'Seller'),  upload.single('image'), productController.insertProduct)
-.put('/:id', upload.single('image'), productController.updateProduct)
-.delete('/:id', productController.deleteProduct)
+.post('/', auth.verifyAccessSeller,  upload.single('image'), productController.insertProduct)
+.put('/:id', auth.verifyAccessSeller, upload.single('image'), productController.updateProduct)
+.delete('/:id', auth.verifyAccessSeller, productController.deleteProduct)
 
 
 module.exports = router

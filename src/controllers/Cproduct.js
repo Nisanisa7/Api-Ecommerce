@@ -3,18 +3,18 @@ const connection = require('../configs/db')
 const productModel = require('../models/Mproduct')
 const helpers = require('../helpers/helpers')
 const fs = require('fs')
+const redis = require("redis")
+const client = redis.createClient();
 
 //======================================================
+
 const getProductById = (req, res, next)=>{
     const id = req.params.idproduct
     productModel.getProductById(id)
     .then((result)=>{
         const products = result
-        res.status(200)
-        res.json({
-            message: 'success',
-            data: products
-        })
+        client.set(`chaceProduct/${id}`, JSON.stringify(products));
+        helpers.response(res, products, 200)
     })
     .catch((error)=>{
         console.log(error);

@@ -78,13 +78,12 @@ const insertOrder = (req, res, next)=>{
 }
 // UPDATE PRODUCT ===========================================
 const updateOrder = (req, res, next)=>{
-    const {idUser, idProduct, status_order, orderQty} = req.body
+    const {idUser, idProduct, status_order} = req.body
     const id = req.params.id
     const data = {
         idUser : idUser,
         idProduct : idProduct,
         status_order : status_order,
-        orderQty : orderQty,
         orderDate : new Date()
     }
    orderModel.updateOrder(id, data)
