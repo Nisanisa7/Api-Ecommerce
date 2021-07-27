@@ -13,6 +13,20 @@ const getAllCategory = () =>{
 }
 // ========================================================
 
+const getCategoryByID =(id)=>{
+    return new Promise((resolve, reject) => {
+      connection.query("SELECT * FROM category where idCategory = ?",id, (error, result) => {
+        if (!error) {
+          resolve(result)
+        } else {
+          reject(error)
+        }
+      })
+    })
+  }
+
+//   ====================================================
+
 const insertCategory = (data)=>{
     return new Promise((resolve, reject)=>{
         connection.query('INSERT INTO category SET ?', data, (error, result)=>{
@@ -58,5 +72,6 @@ module.exports = {
     getAllCategory,
     insertCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getCategoryByID
 }

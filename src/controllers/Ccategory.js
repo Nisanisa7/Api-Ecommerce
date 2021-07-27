@@ -1,25 +1,43 @@
 const connection = require('../configs/db')
 const categoryModel = require('../models/Mcategory')
+const helpers = require('../helpers/helpers')
+const redis = require("redis")
+const client = redis.createClient();
+
+const getCategoryByID = (req, res, next)=>{
+    const id = req.params.idcategory
+    categoryModel.getCategoryByID(id)
+    .then((result)=>{
+        const category = result
+        client.set(`chaceCategory/${id}`, JSON.stringify(category));
+        helpers.response(res, category, 200, {message: "showing category detail of " +id})
+    })
+    .catch((error)=>{
+        
+        console.log(error);
+        helpers.response(res, null, 500, {message: 'internal server error'})
+    })
+
+}
 
 // ===========================================
 const getAllCategory = (req, res, next) =>{
     categoryModel.getAllCategory()
     .then((result)=>{
         const category = result
-        res.status(200)
-        res.json({
-            message: 'success',
-            data: category
-        })
+        client.set(`allCategory`, JSON.stringify(category));
+        helpers.response(res, category, 200)
     })
     .catch((error)=>{
-        console.log(error);
+        console.log(error);``
         res.status(500)
         res.json({
             message: 'internal server error'
         })
     })
 }
+
+// ===========================================
 //========================================
 //insert
 const insertCategory = (req, res, next)=>{
@@ -95,5 +113,6 @@ module.exports = {
     getAllCategory,
     insertCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getCategoryByID
 }

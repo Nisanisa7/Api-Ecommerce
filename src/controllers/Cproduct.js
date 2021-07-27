@@ -3,7 +3,7 @@ const connection = require('../configs/db')
 const productModel = require('../models/Mproduct')
 const helpers = require('../helpers/helpers')
 const fs = require('fs')
-const redis = require("redis")
+const redis = require('redis')
 const client = redis.createClient();
 
 //======================================================
@@ -37,6 +37,7 @@ const getAllProduct = (req, res, next) =>{
     productModel.getAllProduct(search, sortBy, sort, offset, limit)
     .then((result)=>{
         const products = result
+        // client.set(`chaceProduct`, JSON.stringify(products));
         helpers.response(res, products, 200)
     })
     .catch((error)=>{
@@ -95,7 +96,7 @@ const updateProduct = (req, res, next)=>{
     productModel.updateProduct(id, data)
     .then(()=>{
         
-        helpers.response(res, data, 200, {message: "Data Successfully Inserted"})
+        helpers.response(res, data, 200, {message: "Data Successfully Updated"})
     })
     .catch((error)=>{
         console.log(error);
