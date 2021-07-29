@@ -34,7 +34,31 @@ const findUser = (email)=>{
         })
     })
 }
+
+// const checkStatus = (status)=>{
+//     return new Promise((resolve, reject)=>{
+//         connection.query(`SELECT * FROM users where status = ?`, status, (error, result)=>{
+//             if(!error){
+//                 resolve(result)
+//             } else{
+//                 reject(error)
+//             }
+//         })
+//     })
+// }
 //==========================================================
+
+const updateStatus = (email)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query(`UPDATE users SET status = 1 where email = ?`, email, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
 // Update Product ==========================================
 const updateUser = (id, data)=>{
     return new Promise((resolve, reject)=>{
@@ -65,5 +89,7 @@ module.exports = {
     Register,
     updateUser,
     deleteUser,
-    findUser
+    findUser,
+    updateStatus
+    // checkStatus
 }

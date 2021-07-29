@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const orderController = require('../controllers/Corder')
 const auth = require('../middleware/auth')
+// const checkRole = require('../middleware/checkrole')
 
 
 

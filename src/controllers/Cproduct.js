@@ -3,7 +3,7 @@ const connection = require('../configs/db')
 const productModel = require('../models/Mproduct')
 const helpers = require('../helpers/helpers')
 const fs = require('fs')
-const redis = require('redis')
+const redis = require("redis")
 const client = redis.createClient();
 
 //======================================================
@@ -32,13 +32,27 @@ const getAllProduct = (req, res, next) =>{
     const search = req.query.search || ''
     const sortBy = req.query.sortBy || 'idProduct'
     const sort = req.query.sort|| 'ASC'
-    const limit = parseInt(req.query.limit)|| 15
-    const offset = (page-1) * limit
+    const limit = parseInt(req.query.limit)||3
+    const offset = page ? page * limit :0;
     productModel.getAllProduct(search, sortBy, sort, offset, limit)
     .then((result)=>{
         const products = result
+        client.set(`allProduct/`, JSON.stringify(products));
+        const totalpages = Math.ceil(products.count/limit)
+        
         // client.set(`chaceProduct`, JSON.stringify(products));
-        helpers.response(res, products, 200)
+        // console.log(products);
+        res.status(200)
+        res.json({
+            "message": 'success',
+            "totalpages": totalpages,
+            "limit": limit,
+            "currentpageNumber": page,
+            "currentpageSize" : result.length,
+            "totalItems" : result.count,
+            item: products,
+
+        })
     })
     .catch((error)=>{
         console.log(error);
@@ -80,7 +94,7 @@ const insertProduct = (req, res, next)=>{
 //===========================================================
 // UPDATE PRODUCT ===========================================
 const updateProduct = (req, res, next)=>{
-    const {productName, description, price, brands, stock, idCategory} = req.body
+    const {productName, description, price, brands, stock} = req.body
     const id = req.params.id
     const data = {
         productName : productName,
@@ -88,7 +102,7 @@ const updateProduct = (req, res, next)=>{
         brands : brands,
         price : price,
         stock : stock,
-        idCategory : idCategory,
+        // idCategory : idCategory,
         image : req.file.filename,
         create_date : new Date(),
         updatedAt : new Date()

@@ -10,6 +10,7 @@ router
 .post('/login', userController.Login)
 .put('/:id', auth.verifyAccessAdmin, userController.updateUser)
 .delete('/:id', auth.verifyAccessAdmin, userController.deleteUser)
+.get('/verification/:token', userController.userActivation)
 
 module.exports = router
 

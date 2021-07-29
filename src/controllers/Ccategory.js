@@ -8,8 +8,9 @@ const getCategoryByID = (req, res, next)=>{
     const id = req.params.idcategory
     categoryModel.getCategoryByID(id)
     .then((result)=>{
-        const category = result
-        client.set(`chaceCategory/${id}`, JSON.stringify(category));
+        const category = 
+        // client.del(`chaceCategory/${id}`, JSON.stringify(category));
+        client.set(`chaceCategory/${id}`, JSON.stringify(category));    
         helpers.response(res, category, 200, {message: "showing category detail of " +id})
     })
     .catch((error)=>{
@@ -19,6 +20,7 @@ const getCategoryByID = (req, res, next)=>{
     })
 
 }
+
 
 // ===========================================
 const getAllCategory = (req, res, next) =>{
@@ -40,8 +42,14 @@ const getAllCategory = (req, res, next) =>{
 // ===========================================
 //========================================
 //insert
-const insertCategory = (req, res, next)=>{
+const insertCategory = async (req, res, next)=>{
     const {categoryName} = req.body
+
+    const check = await categoryModel.checkCategory(categoryName)
+    if(check.length>0){
+        return helpers.response(res, null, 401, {message:"This category already existed"})
+    }
+
     const data = {
         categoryName : categoryName
     }

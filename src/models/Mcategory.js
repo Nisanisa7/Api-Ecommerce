@@ -39,6 +39,18 @@ const insertCategory = (data)=>{
     })
 }
 // ===========================================================
+const checkCategory = (categoryName)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query('SELECT * FROM category where categoryName = ?', categoryName, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else{
+                reject(error)
+            }
+        })
+    })
+}
+//=============================================================
 //Update Product
 const updateCategory = (id, data)=>{
     return new Promise((resolve, reject)=>{
@@ -73,5 +85,6 @@ module.exports = {
     insertCategory,
     updateCategory,
     deleteCategory,
-    getCategoryByID
+    getCategoryByID,
+    checkCategory
 }
