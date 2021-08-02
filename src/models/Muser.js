@@ -47,6 +47,29 @@ const findUser = (email)=>{
 //     })
 // }
 //==========================================================
+const Register_buyer = (data)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query('INSERT INTO custommer SET ?', data, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else{
+                reject(error)
+            }
+        })
+    })
+}
+const findBuyer = (email)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query('SELECT * FROM custommer where email = ?', email, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else{
+                reject(error)
+            }
+        })
+    })
+}
+//==========================================================
 
 const updateStatus = (email)=>{
     return new Promise((resolve, reject)=>{
@@ -90,6 +113,8 @@ module.exports = {
     updateUser,
     deleteUser,
     findUser,
-    updateStatus
+    updateStatus,
+    Register_buyer,
+    findBuyer
     // checkStatus
 }

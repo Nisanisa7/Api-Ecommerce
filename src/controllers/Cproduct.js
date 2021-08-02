@@ -32,7 +32,7 @@ const getAllProduct = (req, res, next) =>{
     const search = req.query.search || ''
     const sortBy = req.query.sortBy || 'idProduct'
     const sort = req.query.sort|| 'ASC'
-    const limit = parseInt(req.query.limit)||3
+    const limit = parseInt(req.query.limit)||5
     const offset = page ? page * limit :0;
     productModel.getAllProduct(search, sortBy, sort, offset, limit)
     .then((result)=>{

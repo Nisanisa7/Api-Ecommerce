@@ -18,6 +18,75 @@ const getAllUser = (req, res, next) =>{
         helpers.response(res, null, 500, {message: 'internal server error'})
     })
 }
+// =====================================================================
+const Register_buyer = async (req, res, next)=>{
+    const {name, email, password} = req.body
+
+    const buyer = await userModel.findBuyer(email)
+    if (buyer.length > 0){
+        return helpers.response(res, null, 401, {message:"This email address is already being used"})
+    }
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(password , salt, function(err, hash) {
+            // Store hash in your password DB.
+            // console.log(hash);
+            const data = {
+                idCustommer: uuidv4(),
+                name : name,
+                email : email,
+                password : hash,
+                // status: 0,
+                role : 'custommer'
+            }
+            userModel.Register_buyer(data)
+            .then((result)=>{
+                delete data.password
+                // jwt.sign({ email: data.email }, process.env.SECRET_KEY, function(err, token) {
+
+                //     emailActivation.sendEmail(data.email, data.userName, token)
+                //   });
+
+                helpers.response(res, data , 200, {message: "registered success!"})
+              
+            })
+            .catch((error)=>{
+                console.log(error);
+                helpers.response(res, null, 500, {message: 'internal server error'})
+            })
+        });
+    });
+
+}
+//Login Buyer---------------------------------------
+const Login_buyer = async (req, res, next) =>{
+    const {email, password } = req.body
+    const result = await userModel.findBuyer(email)
+    const user = result[0]
+    if(email == ''|| password == ''){
+        helpers.response(res, null, 500, {message: 'Email or Password can not be empty'})
+    }
+    else if(result < 1){
+        return helpers.response(res, null, 500, {message: "We couldn't find an account that matched the one you entered. please try again"})
+    }
+    bcrypt.compare(password, user.password, function(err, resCompare) {
+        if (!resCompare) {      
+            return helpers.response(res, null, 401, {message: 'Password wrong'})
+        }
+
+        // generate token
+        jwt.sign({ email: user.email, role: 'custommer'},
+            process.env.SECRET_KEY, { expiresIn: "24h" },
+            function(err, token) {
+                console.log(token);
+                console.log(process.env.SECRET_KEY);
+                delete user.password;
+                user.token = token;
+                helpers.response(res, user, 200)
+            }
+        );
+    });
+}
+// ========================================================================
 // REGISTER ==========================================================
 const Register = async (req, res, next)=>{
     const {userName, email, password, role} = req.body
@@ -65,18 +134,14 @@ const Register = async (req, res, next)=>{
 const Login = async (req, res, next) =>{
     const {email, password, role, status} = req.body
     const result = await userModel.findUser(email)
-    // console.log(result);
     const user = result[0]
-    // const statuscheck = userModel.checkStatus(status)
     if(email == ''|| password == ''){
         helpers.response(res, null, 500, {message: 'Email or Password can not be empty'})
     }
+    else if(result < 1){
+        return helpers.response(res, null, 500, {message: "We couldn't find an account that matched the one you entered. please try again"})
+    }
     
-    // else if(statuscheck == 0){
-    //     helpers.response(res, null, 500, {message: 'Your Account is not verified'})   
-    // }
-    // console.log(statuscheck);
-    // console.log(user.email);
     bcrypt.compare(password, user.password, function(err, resCompare) {
         if (!resCompare) {      
             return helpers.response(res, null, 401, {message: 'Password wrong'})
@@ -159,7 +224,8 @@ const userActivation = (req, res, next) =>{
                     console.log(email);
                     userModel.updateStatus(email)
                     .then(()=>{
-                        helpers.response(res, null, 200, {message: "Your account has been successfully verified"})
+                        // helpers.response(res, null, 200, {message: "Your account has been successfully verified"})
+                        res.redirect('http://localhost3000/login')
                     })
                     .catch((err)=>{
                         console.log(err);
@@ -184,6 +250,8 @@ module.exports = {
     updateUser,
     deleteUser, 
     Login,
-    userActivation
+    userActivation,
+    Register_buyer,
+    Login_buyer
 
 }

@@ -12,6 +12,10 @@ router
 .delete('/:id', auth.verifyAccessAdmin, userController.deleteUser)
 .get('/verification/:token', userController.userActivation)
 
+//Buyer Auth -------------------
+.post('/register_buyer', userController.Register_buyer)
+.post('/login_buyer', userController.Login_buyer)
+
 module.exports = router
 
 
