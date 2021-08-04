@@ -28,11 +28,11 @@ const getProductById = (req, res, next)=>{
 
 //get data from database ===============================
 const getAllProduct = (req, res, next) =>{
-    const page = parseInt(req.query.page) || 1
+    const page = parseInt(req.query.page) 
     const search = req.query.search || ''
     const sortBy = req.query.sortBy || 'idProduct'
     const sort = req.query.sort|| 'ASC'
-    const limit = parseInt(req.query.limit)||5
+    const limit = parseInt(req.query.limit)||10
     const offset = page ? page * limit :0;
     productModel.getAllProduct(search, sortBy, sort, offset, limit)
     .then((result)=>{
@@ -70,7 +70,7 @@ const insertProduct = (req, res, next)=>{
         price : price,
         stock : stock,
         idCategory : idCategory,
-        image : req.file.filename,
+        image : 'http:localhost:4000/file/'+ req.file.filename,
         create_date : new Date(),
         updatedAt : new Date()
     }

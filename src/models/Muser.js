@@ -12,6 +12,29 @@ const getAllUser = () =>{
     })
 }
 // ========================================================
+const Register_seller = (data)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query('INSERT INTO seller SET ?', data, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else{
+                reject(error)
+            }
+        })
+    })
+}
+const findseller = (email)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query('SELECT * FROM seller where email = ?', email, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else{
+                reject(error)
+            }
+        })
+    })
+}
+// ========================================================
 const Register = (data)=>{
     return new Promise((resolve, reject)=>{
         connection.query('INSERT INTO users SET ?', data, (error, result)=>{
@@ -82,6 +105,18 @@ const updateStatus = (email)=>{
         })
     })
 }
+//---------------------------------------------------------
+const updateStatusCust = (email)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query(`UPDATE custommer SET status = 'Active' where email = ?`, email, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
 // Update Product ==========================================
 const updateUser = (id, data)=>{
     return new Promise((resolve, reject)=>{
@@ -115,6 +150,9 @@ module.exports = {
     findUser,
     updateStatus,
     Register_buyer,
-    findBuyer
+    findBuyer,
+    updateStatusCust,
+    Register_seller,
+    findseller
     // checkStatus
 }

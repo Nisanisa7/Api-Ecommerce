@@ -15,6 +15,10 @@ router
 //Buyer Auth -------------------
 .post('/register_buyer', userController.Register_buyer)
 .post('/login_buyer', userController.Login_buyer)
+.get('/custActivation/:token', userController.custActivation)
+
+//Seller Auth -----------------------
+.post('/register_seller', userController.Register_seller)
 
 module.exports = router
 
