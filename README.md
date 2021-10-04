@@ -7,7 +7,7 @@
   
   <p align="center">
     <br />
-    <a href="blanja-silk.vercel.app">View Demo</a>
+    <a href="https://blanja-silk.vercel.app/">View Demo</a>
     ·
     <a href="https://github.com/Nisanisa7/Api-Ecommerce/issues">Report Bug</a>
     ·
