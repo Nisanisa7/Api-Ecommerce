@@ -2,9 +2,9 @@
 
   <h3 align="center">Api Ecommerce</h3>
   <p align="center">
-<!--     <image align="center" width="200" src='https://github.com/muchamadagush/coffee-shop/blob/main/public/logoCoffeShop.svg' /> -->
+  <image align="center" src='./uploads/logoblanja.png' />
   </p>
-
+  
   <p align="center">
     <br />
     <a href="blanja-silk.vercel.app">View Demo</a>
