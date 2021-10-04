@@ -27,7 +27,11 @@
 
 ## About The Project
 
-Api Ecommerce is an api for webiste Ecommerce
+Blanja is an E-commerce website that focused on selling fashion related stuff.
+There's two role in this aplication. That's User and Seller, as custommer you can order the item you liked,
+and manage your profile. As seller you can manage your selling product, updating custommer order data,
+and manage your store profile. Blanja also has a feature to filter, search, and paginate product.
+And this repository is an api for webiste Ecommerce
 
 ### Built With
 
