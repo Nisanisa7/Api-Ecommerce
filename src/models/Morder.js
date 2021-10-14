@@ -12,10 +12,22 @@ const getOrderById =(id)=>{
     })
   }
  //======================================================== 
+ const getOrderByCust =(id)=>{
+    return new Promise((resolve, reject) => {
+      connection.query("SELECT * FROM orders where idCustommer = ?",id, (error, result) => {
+        if (!error) {
+          resolve(result)
+        } else {
+          reject(error)
+        }
+      })
+    })
+  }
+ //======================================================== 
 const getAllOrder = (search, sortBy, sort,offset, limit) =>{
     return new Promise((resolve, reject)=>{
         const queryCount = ('SELECT count(*) as numRows FROM orders') 
-        connection.query(`SELECT * FROM orders INNER JOIN users on orders.idUser = users.idUser INNER JOIN product on orders.idProduct = product.idProduct WHERE orders.status_order LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort} LIMIT ?, ?`, [search, offset, limit], (error, result)=>{
+        connection.query(`SELECT * FROM orders INNER JOIN custommer on orders.idCustommer = custommer.idCustommer WHERE orders.status_order LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort} LIMIT ?, ?`, [search, offset, limit], (error, result)=>{
             if (!error) {
                 resolve(result)
             } else {
@@ -38,9 +50,22 @@ const insertOrder = (data)=>{
 }
 //==========================================================
 // Update order ==========================================
-const updateOrder = (id, data)=>{
+const updateOrder = (data, idOrder)=>{
+    console.log(data, 'ini dimodel');
     return new Promise((resolve, reject)=>{
-        connection.query('UPDATE orders SET ? WHERE idOrder = ?', [data, id], (error, result)=>{
+        connection.query('UPDATE orders SET ? WHERE idOrder = ?', [data, idOrder], (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
+// cancel order ==========================================
+const cancelOrder = (id)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query("UPDATE orders SET status_order = 'Cancelled' WHERE idOrder = ?", [id], (error, result)=>{
             if(!error){
                 resolve(result)
             } else {
@@ -66,5 +91,7 @@ module.exports = {
     insertOrder,
     updateOrder,
     deleteOrder,
-    getOrderById
+    getOrderById,
+    cancelOrder,
+    getOrderByCust
 }

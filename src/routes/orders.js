@@ -9,8 +9,10 @@ const auth = require('../middleware/auth')
 router
 .get('/', orderController.getAllOrder)
 .get('/:idorder', orderController.getOrderById)
+.get('/custommer/:idCustommer', orderController.getOrderByCust)
 .post('/', auth.verifyAccess, orderController.insertOrder)
-.put('/:id', auth.verifyAccessAdmin, orderController.updateOrder)
-.delete('/:id', auth.verifyAccessAdmin,  orderController.deleteOrder)
+.patch('/:idOrder', orderController.updateOrder)
+.patch('/cancel/:idOrder', orderController.cancelOrder)
+.delete('/:id', auth.verifyAccessSeller,  orderController.deleteOrder)
 
 module.exports = router

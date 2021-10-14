@@ -9,8 +9,8 @@ router
 
 .get('/',  redis.cacheCategory, categoryController.getAllCategory)
 .get('/:idcategory', redis.detailCategory, categoryController.getCategoryByID)
-.post('/', auth.verifyAccessAdmin, categoryController.insertCategory)
-.put('/:id', auth.verifyAccessAdmin, categoryController.updateCategory)
-.delete('/:id', auth.verifyAccessAdmin, categoryController.deleteCategory)
+.post('/', auth.verifyAccessSeller, categoryController.insertCategory)
+.put('/:id', auth.verifyAccessSeller, categoryController.updateCategory)
+.delete('/:id', auth.verifyAccessSeller, categoryController.deleteCategory)
 
 module.exports = router

@@ -5,7 +5,7 @@ const auth = require('../middleware/auth')
 
 
 router
-.get('/', auth.verifyAccessAdmin, userController.getAllUser)
+.get('/', userController.getAllUser)
 .post('/register', userController.Register)
 .post('/login', userController.Login)
 .put('/:id', auth.verifyAccessAdmin, userController.updateUser)
@@ -16,10 +16,18 @@ router
 .post('/register_buyer', userController.Register_buyer)
 .post('/login_buyer', userController.Login_buyer)
 .get('/custActivation/:token', userController.custActivation)
+// .put('/change/:email', userController.changePastCust)
+
+// -----------------------------------------------------
+.get('/email', userController.forgotPassCust)
+.put('/changePass', userController.changePassword)
 
 //Seller Auth -----------------------
 .post('/register_seller', userController.Register_seller)
+.get('/sellerActivation/:token', userController.sellerActivation)
+.post('/login_seller', userController.Login_seller)
 
+.post('/refreshtoken', userController.RefreshToken)
 module.exports = router
 
 

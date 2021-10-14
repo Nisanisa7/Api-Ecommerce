@@ -77,6 +77,7 @@ const updateCategory = (req, res, next)=>{
     const data = {
         categoryName : categoryName
     }
+    console.log(data);
     categoryModel.updateCategory(id, data)
     .then(()=>{
         res.json({

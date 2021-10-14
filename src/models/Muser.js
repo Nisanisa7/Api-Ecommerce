@@ -23,7 +23,7 @@ const Register_seller = (data)=>{
         })
     })
 }
-const findseller = (email)=>{
+const findSeller = (email)=>{
     return new Promise((resolve, reject)=>{
         connection.query('SELECT * FROM seller where email = ?', email, (error, result)=>{
             if(!error){
@@ -92,6 +92,15 @@ const findBuyer = (email)=>{
         })
     })
 }
+const changePasswordCust = (email, data) =>{
+    connection.query('UPDATE ustommer SET password = ?', email, data, (error, result)=>{
+        if(!error){
+            resolve(result)
+        }else{
+            reject(error)
+        }
+    })
+}
 //==========================================================
 
 const updateStatus = (email)=>{
@@ -117,6 +126,18 @@ const updateStatusCust = (email)=>{
         })
     })
 }
+//---------------------------------------------------------
+const updateStatusSeller = (email)=>{
+    return new Promise((resolve, reject)=>{
+        connection.query(`UPDATE seller SET status = 'Active' where email = ?`, email, (error, result)=>{
+            if(!error){
+                resolve(result)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
 // Update Product ==========================================
 const updateUser = (id, data)=>{
     return new Promise((resolve, reject)=>{
@@ -129,6 +150,18 @@ const updateUser = (id, data)=>{
         })
     })
 }
+//===========================================================
+// const updatePassword = (email, data)=>{
+//     return new Promise((resolve, reject)=>{
+//         connection.query('UPDATE custommer SET ? WHERE email = ?', [data, email], (error, result)=>{
+//             if(!error){
+//                 resolve(result)
+//             } else {
+//                 reject(error)
+//             }
+//         } )
+//     })
+// }
 //========== delete Product ================================
 const deleteUser = (id)=>{
     return new Promise((resolve, reject)=>{
@@ -151,8 +184,11 @@ module.exports = {
     updateStatus,
     Register_buyer,
     findBuyer,
+    changePasswordCust,
+    // updatePassword,
     updateStatusCust,
     Register_seller,
-    findseller
+    findSeller,
+    updateStatusSeller
     // checkStatus
 }

@@ -53,9 +53,6 @@ const updateProduct = (id, data)=>{
 }
 
 
-//===========================================================
-
-
 
 //========== delete Product ================================
 const deleteProduct = (id)=>{
@@ -70,10 +67,24 @@ const deleteProduct = (id)=>{
     })
 }
 //==========================================================
+const updateStock = (data, idProduct)=>{
+    return new Promise((resolve, reject)=>{
+    connection.query(`UPDATE product SET ? WHERE idProduct = ?`, [data, idProduct], (error, result)=>{
+        if(!error){
+            resolve(result)
+        } else{
+            reject(error)
+        }
+    })
+})
+}
+//==========================================================
+
 module.exports = {
     getAllProduct,
     insertProduct,
     updateProduct,
     deleteProduct,
-    getProductById
+    getProductById,
+    updateStock
 }

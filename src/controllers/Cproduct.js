@@ -39,9 +39,7 @@ const getAllProduct = (req, res, next) =>{
         const products = result
         client.set(`allProduct/`, JSON.stringify(products));
         const totalpages = Math.ceil(products.count/limit)
-        
-        // client.set(`chaceProduct`, JSON.stringify(products));
-        // console.log(products);
+
         res.status(200)
         res.json({
             "message": 'success',
@@ -70,7 +68,7 @@ const insertProduct = (req, res, next)=>{
         price : price,
         stock : stock,
         idCategory : idCategory,
-        image : 'http:localhost:4000/file/'+ req.file.filename,
+        image : `${process.env.BASE_URL}/file/`+ req.file.filename,
         create_date : new Date(),
         updatedAt : new Date()
     }
@@ -103,7 +101,7 @@ const updateProduct = (req, res, next)=>{
         price : price,
         stock : stock,
         // idCategory : idCategory,
-        image : req.file.filename,
+        image : `${process.env.BASE_URL}/file/`+ req.file.filename,
         create_date : new Date(),
         updatedAt : new Date()
     }
@@ -120,14 +118,6 @@ const updateProduct = (req, res, next)=>{
         })
     })
 }
-
-
-
-
-//============================================================
-
-
-
 //delete product============================================
 
 const deleteProduct = (req, res)=>{
@@ -148,14 +138,30 @@ const deleteProduct = (req, res)=>{
     })
 }
 
-
-
 //=========================================================
+const updateStock = (req, res, next) => {
+    const idProduct = req.params.idProduct
+    const {stock} = req.body
+    const data = {
+        stock : stock,
+    }
+    console.log(data);
+    productModel.updateStock(data, idProduct)
+    .then(()=>{
+        helpers.response(res, data, 200, {message: "Data Successfully updated"})
+    })
+    .catch((error)=>{
+        console.log(error);
+        helpers.response(res, null, 500, {message: 'internal server error'})
+    })
+}
+
 
 module.exports = {
     getAllProduct,
     insertProduct,
     updateProduct,
     deleteProduct,
-    getProductById
+    getProductById,
+    updateStock,
 } 

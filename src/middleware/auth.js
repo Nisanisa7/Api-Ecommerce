@@ -3,30 +3,6 @@ const jwt = require('jsonwebtoken')
 const helpers = require('../helpers/helpers')
 
 
-// const authPage = (permission)=>{
-//     return (req, res, next)=>{
-//         const roleUser = req.body.role
-//         // const token = req.headers.authorization
-//         if(permission.includes(roleUser)){
-//             next()
-//         } else{
-//             return helpers.response(res, null, 401, {message:"You do not have a permission to perform this action"})
-//         }
-//     }
-
-// }
-
-// const restrictTo = (...roles) =>{
-//     return (req, res, next)=>{
-//         const roleUser = req.body.role
-//         console.log(roleUser);
-//         if(!roles.includes(roleUser)){
-//             return helpers.response(res, null, 403, {message:"You do not have a permission to perform this action"})
-//         } else{
-//             next()
-//         }
-//     }
-// }
 const verifyAccess = (req, res, next)=>{
   const token = req.headers.authorization
   if (!token){
@@ -140,7 +116,7 @@ const verifyAccessCustomer = (req, res, next)=>{
        
       }
       console.log(decoded.role);
-      if(decoded.role == 'Custommer'){
+      if(decoded.role == 'custommer'){
   
           next()
           
@@ -181,7 +157,7 @@ const verifyAccessCustomer = (req, res, next)=>{
        
       }
       console.log(decoded.role);
-      if(decoded.role == 'Seller'){
+      if(decoded.role == 'seller'){
   
           next()
           

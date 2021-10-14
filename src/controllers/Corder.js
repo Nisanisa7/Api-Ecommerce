@@ -1,7 +1,7 @@
 const connection = require('../configs/db')
 const orderModel = require('../models/Morder')
 const { v4: uuidv4 } = require('uuid');
-
+const helpers = require('../helpers/helpers')
 //======================================================
 const getOrderById = (req, res, next)=>{
     const id = req.params.idorder
@@ -23,7 +23,25 @@ const getOrderById = (req, res, next)=>{
     })
 }
 //=========================================
-
+const getOrderByCust = (req, res, next)=>{
+    const idCustommer = req.params.idCustommer
+   orderModel.getOrderByCust(idCustommer)
+    .then((result)=>{
+        const order = result
+        res.status(200)
+        res.json({
+            message: 'success',
+            data: order
+        })
+    })
+    .catch((error)=>{
+        console.log(error);
+        res.status(500)
+        res.json({
+            message: 'internal server error'
+        })
+    })
+}
 
 //get data from database ===============================
 const getAllOrder = (req, res, next) =>{
@@ -52,13 +70,15 @@ const getAllOrder = (req, res, next) =>{
 }
 // INSERT DATA TO DB =======================================
 const insertOrder = (req, res, next)=>{
-    const {idUser, idProduct, status_order, orderQty} = req.body
+    const {idCustommer, productName, totalPrice, orderQty, payment} = req.body
     const data = {
         idOrder: uuidv4(),
-        idUser : idUser,
-        idProduct : idProduct,
-        status_order : status_order,
+        idCustommer : idCustommer,
+        productName : productName,
+        totalPrice : totalPrice,
+        payment :payment,
         orderQty : orderQty,
+        status_order: "Waiting payment confirmation",
         orderDate : new Date()
     }
    orderModel.insertOrder(data)
@@ -78,27 +98,32 @@ const insertOrder = (req, res, next)=>{
 }
 // UPDATE PRODUCT ===========================================
 const updateOrder = (req, res, next)=>{
-    const {idUser, idProduct, status_order} = req.body
-    const id = req.params.id
+    const idOrder = req.params.idOrder
+    const {status_order} = req.body
     const data = {
-        idUser : idUser,
-        idProduct : idProduct,
         status_order : status_order,
-        orderDate : new Date()
     }
-   orderModel.updateOrder(id, data)
+    console.log(data);
+    orderModel.updateOrder(data, idOrder)
     .then(()=>{
-        res.json({
-            message: 'data berhasil di Update',
-            data: data
-        })
+        helpers.response(res, data, 200, {message: "Data Successfully updated"})
     })
     .catch((error)=>{
         console.log(error);
-        res.status(500)
-        res.json({
-            message:'internal server error'
-        })
+        helpers.response(res, null, 500, {message: 'internal server error'})
+    })
+}
+
+// Cancel Order ==========================================
+const cancelOrder = (req, res)=>{
+    const idOrder = req.params.idOrder
+    orderModel.cancelOrder(idOrder)
+    .then((result)=>{
+        helpers.response(res, result, 200, {message: "order cancelled"})
+    })
+    .catch((err)=>{
+        console.log(err);
+        helpers.response(res, err, 500, {message: "internal server error"})
     })
 }
 //delete Order============================================
@@ -128,5 +153,7 @@ module.exports = {
     insertOrder,
     updateOrder,
     deleteOrder,
-    getOrderById
+    getOrderById,
+    cancelOrder,
+    getOrderByCust
 }
