@@ -1,8 +1,8 @@
 const connection = require('../configs/db')
 const categoryModel = require('../models/Mcategory')
 const helpers = require('../helpers/helpers')
-const redis = require("redis")
-const client = redis.createClient();
+// const redis = require("redis")
+// const client = redis.createClient();
 
 const getCategoryByID = (req, res, next)=>{
     const id = req.params.idcategory
@@ -10,7 +10,7 @@ const getCategoryByID = (req, res, next)=>{
     .then((result)=>{
         const category = 
         // client.del(`chaceCategory/${id}`, JSON.stringify(category));
-        client.set(`chaceCategory/${id}`, JSON.stringify(category));    
+        // client.set(`chaceCategory/${id}`, JSON.stringify(category));    
         helpers.response(res, category, 200, {message: "showing category detail of " +id})
     })
     .catch((error)=>{
@@ -27,7 +27,7 @@ const getAllCategory = (req, res, next) =>{
     categoryModel.getAllCategory()
     .then((result)=>{
         const category = result
-        client.set(`allCategory`, JSON.stringify(category));
+        // client.set(`allCategory`, JSON.stringify(category));
         helpers.response(res, category, 200)
     })
     .catch((error)=>{
