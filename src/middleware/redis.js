@@ -1,6 +1,6 @@
-const redis = require("redis")
+// const redis = require("redis")
 const helpers = require('../helpers/helpers')
-const client = redis.createClient();
+// const client = redis.createClient();
 
 const detailProduct = (req, res, next)=>{
   const id = req.params.idproduct

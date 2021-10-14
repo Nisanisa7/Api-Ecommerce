@@ -3,8 +3,8 @@ const connection = require('../configs/db')
 const productModel = require('../models/Mproduct')
 const helpers = require('../helpers/helpers')
 const fs = require('fs')
-const redis = require("redis")
-const client = redis.createClient();
+// const redis = require("redis")
+// const client = redis.createClient();
 
 //======================================================
 
@@ -13,7 +13,7 @@ const getProductById = (req, res, next)=>{
     productModel.getProductById(id)
     .then((result)=>{
         const products = result
-        client.set(`chaceProduct/${id}`, JSON.stringify(products));
+        // client.set(`chaceProduct/${id}`, JSON.stringify(products));
         helpers.response(res, products, 200)
     })
     .catch((error)=>{
@@ -37,7 +37,7 @@ const getAllProduct = (req, res, next) =>{
     productModel.getAllProduct(search, sortBy, sort, offset, limit)
     .then((result)=>{
         const products = result
-        client.set(`allProduct/`, JSON.stringify(products));
+        // client.set(`allProduct/`, JSON.stringify(products));
         const totalpages = Math.ceil(products.count/limit)
 
         res.status(200)
