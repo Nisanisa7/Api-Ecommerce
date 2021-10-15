@@ -57,7 +57,7 @@ const getAdminByID = (req, res, next) =>{
         })
     })
 } 
-const updateSeller = (req, res, next) =>{
+const updateSeller = async (req, res, next) =>{
     const idSeller = req.params.idSeller
     const {store_name, phone_number, store_description, } = req.body
     const {path} = req.file
@@ -136,7 +136,7 @@ const getCustommerByID = (req, res, next) =>{
         })
     })
 } 
-const updateCustommer = (req, res, next) =>{
+const updateCustommer = async (req, res, next) =>{
     const idCustommer = req.params.idCustommer
     let profile = ""
     let imageUserInput = ""

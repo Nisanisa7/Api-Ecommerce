@@ -95,7 +95,7 @@ const insertProduct = async (req, res, next)=>{
 
 //===========================================================
 // UPDATE PRODUCT ===========================================
-const updateProduct = (req, res, next)=>{
+const updateProduct = async (req, res, next)=>{
     const {productName, description, price, brands, stock} = req.body
     const id = req.params.id
     const {path} = req.file
