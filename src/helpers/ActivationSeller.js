@@ -82,7 +82,7 @@ const envoyerEmail = (email, name, token) =>{
                     <h1>welcome to Blanja.com</h1>
                     <h3>Greetings ${name}</h3>
                     <p class="text">Your account has been successfully created! To verify your email address and complete your account creation, please click the verification button below or copy and paste the address into your browser:</p>
-                    <a href="http://localhost:4000/v1/user/sellerActivation/${token}"><input type="button" value="VERIFY ACOOUNT" class="button"></a>
+                    <a href="https://ecommercenisa.herokuapp.com/v1/user/sellerActivation/${token}"><input type="button" value="VERIFY ACOOUNT" class="button"></a>
                 </div>
             </div>
         </body>

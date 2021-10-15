@@ -3,8 +3,13 @@ const connection = require('../configs/db')
 const productModel = require('../models/Mproduct')
 const helpers = require('../helpers/helpers')
 const fs = require('fs')
-// const redis = require("redis")
-// const client = redis.createClient();
+const cloudinary = require('cloudinary').v2
+cloudinary.config({ 
+    cloud_name: 'nisanisa', 
+    api_key: '415693727536492', 
+    api_secret: 'unNAaDTSlWskGqW5JwnitPc6iPA',
+    // secure: true
+  });
 
 //======================================================
 
@@ -37,7 +42,6 @@ const getAllProduct = (req, res, next) =>{
     productModel.getAllProduct(search, sortBy, sort, offset, limit)
     .then((result)=>{
         const products = result
-        // client.set(`allProduct/`, JSON.stringify(products));
         const totalpages = Math.ceil(products.count/limit)
 
         res.status(200)
@@ -59,8 +63,11 @@ const getAllProduct = (req, res, next) =>{
 }
 //==========================================================
 // INSERT DATA TO DB =======================================
-const insertProduct = (req, res, next)=>{
+const insertProduct = async (req, res, next)=>{
+    try {
     const {productName, description, brands, price, stock, idCategory} = req.body
+    const {path} = req.file
+    const UploadResponse = await cloudinary.uploader.upload(path, {upload_preset: 'blanja'})
     const data = {
         productName : productName,
         description : description,
@@ -68,7 +75,7 @@ const insertProduct = (req, res, next)=>{
         price : price,
         stock : stock,
         idCategory : idCategory,
-        image : `${process.env.BASE_URL}/file/`+ req.file.filename,
+        image : UploadResponse.secure_url,
         create_date : new Date(),
         updatedAt : new Date()
     }
@@ -79,14 +86,11 @@ const insertProduct = (req, res, next)=>{
     .catch((error)=>{
         console.log(error);
         helpers.response(res, null, 500, {message: 'internal server error'})
-        fs.unlink(
-            `./uploads/${req.file.filename}`, (err =>{
-                if(err){
-                    console.log(err);
-                }
-            })
-        )
     })
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 //===========================================================
@@ -94,6 +98,8 @@ const insertProduct = (req, res, next)=>{
 const updateProduct = (req, res, next)=>{
     const {productName, description, price, brands, stock} = req.body
     const id = req.params.id
+    const {path} = req.file
+    const UploadResponse = await cloudinary.uploader.upload(path, {upload_preset: 'blanja'})
     const data = {
         productName : productName,
         description : description,
@@ -101,7 +107,7 @@ const updateProduct = (req, res, next)=>{
         price : price,
         stock : stock,
         // idCategory : idCategory,
-        image : `${process.env.BASE_URL}/file/`+ req.file.filename,
+        image : UploadResponse.secure_url,
         create_date : new Date(),
         updatedAt : new Date()
     }

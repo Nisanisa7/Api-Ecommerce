@@ -467,7 +467,7 @@ const sellerActivation = (req, res, next) => {
           .updateStatusSeller(email)
           .then(() => {
             // helpers.response(res, null, 200, {message: "Your account has been successfully verified"})
-            res.redirect("http://localhost:3000/activation_custommer");
+            res.redirect("https://blanja-silk.vercel.app//activation_custommer");
           })
           .catch((err) => {
             console.log(err);

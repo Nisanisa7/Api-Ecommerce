@@ -2,6 +2,13 @@ const connection = require('../configs/db')
 const profileModel = require('../models/Mprofile')
 const helpers = require('../helpers/helpers')
 const fs = require('fs')
+const cloudinary = require('cloudinary').v2
+cloudinary.config({ 
+    cloud_name: 'nisanisa', 
+    api_key: '415693727536492', 
+    api_secret: 'unNAaDTSlWskGqW5JwnitPc6iPA',
+    // secure: true
+  });
 //Seller
 
 const getAllSeller = (req, res, next) =>{
@@ -53,11 +60,13 @@ const getAdminByID = (req, res, next) =>{
 const updateSeller = (req, res, next) =>{
     const idSeller = req.params.idSeller
     const {store_name, phone_number, store_description, } = req.body
+    const {path} = req.file
+    const UploadResponse = await cloudinary.uploader.upload(path, {upload_preset: 'blanja'})
     const data = {
         store_name: store_name, 
         phone_number: phone_number,
         store_description: store_description,
-        image: `${process.env.BASE_URL}/file/`+ req.file.filename
+        image: UploadResponse.secure_url
     }
     console.log(data);
     profileModel.updateSeller(idSeller, data)
@@ -67,13 +76,13 @@ const updateSeller = (req, res, next) =>{
     .catch((error)=>{
         console.log(error);
         helpers.response(res, null, 500, {message: 'internal server error'})
-        fs.unlink(
-            `./uploads/${req.file.filename}`, (err =>{
-                if(err){
-                    console.log(err);
-                }
-            })
-        )
+        // fs.unlink(
+        //     `./uploads/${req.file.filename}`, (err =>{
+        //         if(err){
+        //             console.log(err);
+        //         }
+        //     })
+        // )
     })
 
 }
@@ -131,17 +140,18 @@ const updateCustommer = (req, res, next) =>{
     const idCustommer = req.params.idCustommer
     let profile = ""
     let imageUserInput = ""
-
+    const {path} = req.file
+    const UploadResponse = await cloudinary.uploader.upload(path, {upload_preset: 'blanja'})
     if(!req.file){
         profile = ""
     } else {
-        imageUserInput = req.file.filename
+        imageUserInput = UploadResponse.secure_url
     }
     console.log(imageUserInput);
     profileModel.getCustommerID(idCustommer)
     .then((result)=>{
         const oldImageProfile = result[0].image
-        const newImageProfile = `${process.env.BASE_URL}/file/${imageUserInput}`
+        const newImageProfile = imageUserInput
         const {name, phone_number, gender, datebirth} = req.body
         if(imageUserInput == ""){
             profile = oldImageProfile
@@ -163,13 +173,13 @@ const updateCustommer = (req, res, next) =>{
         .catch((error)=>{
             console.log(error);
             helpers.response(res, null, 500, {message: 'internal server error'})
-            fs.unlink(
-                `./uploads/${req.file.filename}`, (err =>{
-                    if(err){
-                        console.log(err);
-                    }
-                })
-            )
+            // fs.unlink(
+            //     `./uploads/${req.file.filename}`, (err =>{
+            //         if(err){
+            //             console.log(err);
+            //         }
+            //     })
+            // )
         })
     })
 }

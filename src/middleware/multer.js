@@ -3,9 +3,9 @@ const helpers = require('../helpers/helpers')
 const { v4: uuidv4 } = require('uuid');
 const { response } = require('express');
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './uploads')
-    },
+    // destination: function (req, file, cb) {
+    //   cb(null, './uploads')
+    // },
     filename: function (req, file, cb) {
       cb(null, Date.now()+'-'+ uuidv4() + '-' +file.originalname)
     }
