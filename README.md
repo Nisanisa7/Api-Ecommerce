@@ -7,7 +7,7 @@
   
   <p align="center">
     <br />
-    <a href="https://vercel.com/nisanisa7/letsblanja">View Demo</a>
+    <a href="https://letsblanja.vercel.app/">View Demo</a>
     ·
     <a href="https://github.com/Nisanisa7/Api-Ecommerce/issues">Report Bug</a>
     ·
